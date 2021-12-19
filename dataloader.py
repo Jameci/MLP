@@ -1,5 +1,7 @@
 import struct
 import numpy as np
+import dataset
+import os
 
 
 def idx1_loader(filename):
@@ -46,7 +48,18 @@ def idx3_loader(filename):
     return x / 256.0
 
 
+def load_data():
+    cur_path = os.path.abspath(os.curdir)
+    train_set = dataset.Dataset(
+            idx3_loader(cur_path + r'\手写数据集\train-images.idx3-ubyte'),
+            idx1_loader(cur_path + r'\手写数据集\train-labels.idx1-ubyte')
+        )
+    tx = idx3_loader(cur_path + r'\手写数据集\t10k-images.idx3-ubyte')
+    ty = idx1_loader(cur_path + r'\手写数据集\t10k-labels.idx1-ubyte')
+    test_set = dataset.Dataset(tx[:2500], ty[:2500])
+    cross_set = dataset.Dataset(tx[2500:], ty[2500:])
+    return train_set, test_set, cross_set
+
+
 if __name__ == '__main__':
-    x = np.array([1, 2, 3])
-    y = np.array([[4, 5], [7, 8], [6, 9]])
-    print(x.dot(y))
+    a, b, c = load_data()
