@@ -50,10 +50,28 @@ class Net:
 
     def update(self, m):
         for i in range(self.layer - 1):
-            self.theta[i] += self.alpha / m * self.grad[i]
+            self.theta[i] -= self.alpha / m * self.grad[i]
 
     def set_zero(self):
         self.grad = [
             np.random.randn(785, 100),
             np.random.randn(101, 10)
         ]
+
+    def loss(self):
+        res = 0
+        for i in range(10):
+            if self.y[i] == 1:
+                res -= np.log(self.a[self.layer - 2][i])
+            else:
+                res -= np.log(1 - self.a[self.layer - 2][i])
+        return res
+
+    def acc(self):
+        maxv = self.a[self.layer - 2][0]
+        maxp = 0
+        for i in range(1, 10):
+            if maxv < self.a[self.layer - 2][i]:
+                maxv = self.a[self.layer - 2][i]
+                maxp = i
+        return self.y[maxp]
