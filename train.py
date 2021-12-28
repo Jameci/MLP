@@ -20,6 +20,6 @@ def train(data: dataset.Dataset, t: int, batch: int):
                 acc += res.acc()
             res.update(batch)
             res.set_zero()
-        print(loss)
-        print(acc)
+        print(loss / data.length)
+        print(acc / data.length)
     return res
